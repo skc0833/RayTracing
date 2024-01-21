@@ -4,10 +4,12 @@
 class sphere : public hitable {
 public:
     sphere() {}
-    sphere(vec3 cen, float r) : center(cen), radius(r) {}
+    //sphere(vec3 cen, float r) : center(cen), radius(r) {}
+    sphere(vec3 cen, float r, material* mat = nullptr) : center(cen), radius(r), mat(mat) {}
     virtual inline bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
     vec3 center;
     float radius;
+    material* mat = nullptr;
 };
 
 bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
@@ -23,6 +25,7 @@ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
     // 원래는 float discriminant = b * b - 4 * a * c; 였음!(여기서는 x 대신 t 가 사용됨)
     float discriminant = b * b - a * c;
     if (discriminant > 0) {
+        rec.mat_ptr = mat;
         float temp = (-b - sqrt(b * b - a * c)) / a;
         if (temp < t_max && temp > t_min) { // 구 앞쪽에서 교차점
             rec.t = temp; // ray 와 구가 만날 때의 t

@@ -1,4 +1,3 @@
-#if 0
 #include <iostream>
 #include <fstream>
 #include <assert.h>
@@ -30,7 +29,7 @@ static vec3 color(const ray& r, hitable* world, int depth) {
     }
 }
 
-int main_8()
+int main()
 {
     std::string filePath = "ch8_metal.ppm";
     std::ofstream f(filePath);
@@ -47,7 +46,7 @@ int main_8()
     list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.8, 0.3, 0.3)));
     list[1] = new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
     list[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2)));
-    list[3] = new sphere(vec3(-1, 0, -1), 0.5, new lambertian(vec3(0.8, 0.8, 0.8)));
+    list[3] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.8, 0.8, 0.8)));
     hitable* world = new hitable_list(list, 4);
     camera cam;
 
@@ -59,7 +58,7 @@ int main_8()
                 float v = float(j + drand48()) / float(ny);
                 ray r = cam.get_ray(u, v);
                 vec3 p = r.point_at_paramter(2.0);
-                col += color(r, world);
+                col += color(r, world, 0);
             }
             col /= float(ns);
             // 1 이하 sqrt() 의 경우, 값이 커진다(e.g, sqrt(0.1) = 0.32, 0.5 -> 0.70, 0.9 -> 0.95
@@ -73,4 +72,3 @@ int main_8()
     f.close();
     std::cout << filePath << " write finished!\n";
 }
-#endif
